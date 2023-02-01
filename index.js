@@ -1,9 +1,9 @@
-function show_number (num) {
-	console.log(num);
-}
+#!/usr/bin/env node
 
-console.log("ola que ase");
+const http = require('http');
 
-for (let i = 0; i < 10; i++) {
-	show_number(i);
-}
+http.createServer(function(request, result) {
+	console.log("Alguien se conecta");
+	result.write('ola k ase');
+	result.end();
+}).listen(8080);
