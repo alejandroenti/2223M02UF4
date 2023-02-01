@@ -1,0 +1,19 @@
+{
+  "name": "2223m02uf4",
+  "version": "1.0.0",
+  "description": "First project with Node and MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alejandroenti/2223M02UF4.git"
+  },
+  "author": "Alejandro Lopez",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/alejandroenti/2223M02UF4/issues"
+  },
+  "homepage": "https://github.com/alejandroenti/2223M02UF4#readme"
+}
