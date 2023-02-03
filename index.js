@@ -11,6 +11,7 @@ const client = new MongoClient(url);
 // Database Name
 const dbName = 'abascal';
 let db;
+let collection;
 
 async function dbConnect() {
   await client.connect();
@@ -26,6 +27,8 @@ dbConnect()
 
 http.createServer(function(request, response) {
 	console.log("Alguien se conecta");
+	collection = db.collection('characters');
+	console.log(collection);
 	response.write('ola k ase');
 	response.end();
 }).listen(8080);
