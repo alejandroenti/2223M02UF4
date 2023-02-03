@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/alejandroenti/2223M02UF4/issues"
   },
-  "homepage": "https://github.com/alejandroenti/2223M02UF4#readme"
+  "homepage": "https://github.com/alejandroenti/2223M02UF4#readme",
+  "dependencies": {
+    "mongodb": "^5.0.0"
+  }
 }
