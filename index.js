@@ -27,8 +27,11 @@ dbConnect()
 
 http.createServer(function(request, response) {
 	console.log("Alguien se conecta");
-	collection = db.collection('characters');
-	console.log(collection);
+	collection = db.collection('weapons');
+	
+	collection.find({}).toArray()
+		.then(query => console.log('Found documents =>', query));
+
 	response.write('ola k ase');
 	response.end();
 }).listen(8080);
