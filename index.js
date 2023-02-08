@@ -25,6 +25,25 @@ dbConnect()
   .then(console.log)
   .catch(console.error);
 
+function sendCharacters(response) {
+	collection = db.collection('characters');
+	
+	collection.find({}).toArray()
+		.then(characters => {
+			console.log(characters);
+
+			let charactersName = [];
+
+			for (let i = 0; i < characters.length; i++) {
+					charactersName.push(characters[i].name);
+			}
+
+			response.write(JSON.stringify(charactersName));
+			response.end();
+		});
+
+}
+
 http.createServer(function(request, response) {
 	console.log("Alguien se conecta");
 
@@ -33,21 +52,7 @@ http.createServer(function(request, response) {
 	}
 
 	if (request.url == "/characters") {
-		collection = db.collection('characters');
-	
-		collection.find({}).toArray()
-			.then(characters => {
-				console.log(characters);
-
-				let charactersName = [];
-
-				for (let i = 0; i < characters.length; i++) {
-					charactersName.push(characters[i].name);
-				}
-
-				response.write(JSON.stringify(charactersName));
-				response.end();
-			});
+		sendCharacters(response);
 	}
 	else {
 		response.write("Página principal");
