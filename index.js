@@ -27,12 +27,21 @@ dbConnect()
 
 http.createServer(function(request, response) {
 	console.log("Alguien se conecta");
-	collection = db.collection('weapons');
+	collection = db.collection('characters');
 	
 	collection.find({}).toArray()
-		.then(query => console.log('Found documents =>', query));
+		.then(query => {
+			console.log(query);
 
-	response.write('ola k ase');
-	response.end();
+			let charactersName = [];
+
+			for (let i = 0; i < 4; i++) {
+				charactersName.push(query[i].name);
+			}
+
+			response.write(JSON.stringify(charactersName));
+			response.end();
+		});
+
 }).listen(8080);
 
