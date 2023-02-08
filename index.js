@@ -27,21 +27,32 @@ dbConnect()
 
 http.createServer(function(request, response) {
 	console.log("Alguien se conecta");
-	collection = db.collection('characters');
+
+	if (request.url == "/favicon.ico") {
+		return;
+	}
+
+	if (request.url == "/characters") {
+		collection = db.collection('characters');
 	
-	collection.find({}).toArray()
-		.then(query => {
-			console.log(query);
+		collection.find({}).toArray()
+			.then(characters => {
+				console.log(characters);
 
-			let charactersName = [];
+				let charactersName = [];
 
-			for (let i = 0; i < 4; i++) {
-				charactersName.push(query[i].name);
-			}
+				for (let i = 0; i < characters.length; i++) {
+					charactersName.push(characters[i].name);
+				}
 
-			response.write(JSON.stringify(charactersName));
-			response.end();
-		});
+				response.write(JSON.stringify(charactersName));
+				response.end();
+			});
+	}
+	else {
+		response.write("Página principal");
+		response.end();
+	}
 
 }).listen(8080);
 
