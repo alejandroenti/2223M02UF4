@@ -25,7 +25,7 @@ dbConnect()
   .then(console.log)
   .catch(console.error);
 
-function sendCharacters(response) {
+function sendCharacters (response) {
 	collection = db.collection('characters');
 	
 	collection.find({}).toArray()
@@ -44,6 +44,31 @@ function sendCharacters(response) {
 
 }
 
+function sendAge (response, url) {
+
+	if (url.length < 3) {
+		response.write(" [!] ERROR: Edad errónea!");
+		reponse.end();
+		return;
+	}
+
+	collection = db.collection('characters');
+	
+	collection.find({ "name": url[2] }).toArray()
+		.then(character => {
+
+			console.log(character);
+			
+			let data = {
+				age: character[0].age
+			};
+
+			response.write(JSON.stringify(data));
+			response.end();
+		});
+
+}
+
 http.createServer(function(request, response) {
 	console.log("Alguien se conecta");
 
@@ -51,13 +76,22 @@ http.createServer(function(request, response) {
 		return;
 	}
 
-	if (request.url == "/characters") {
+	let url = request.url.split("/");
+	
+	switch (url[1]) {
+
+	case "age":
+		sendAge(response, url);
+		break;
+
+	case "characters":
 		sendCharacters(response);
-	}
-	else {
+		break;
+	
+	default:
 		response.write("Página principal");
 		response.end();
 	}
 
-}).listen(8080);
+}).listen(6969);
 
