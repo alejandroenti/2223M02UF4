@@ -3,6 +3,7 @@
 
 const http = require('http');
 const { MongoClient } = require('mongodb');
+const fs = require('fs');
 
 // Connection URL
 const url = 'mongodb://127.0.0.1:27017';
@@ -48,22 +49,24 @@ function sendAge (response, url) {
 
 	if (url.length < 3) {
 		response.write(" [!] ERROR: Edad errónea!");
-		reponse.end();
+		response.end();
 		return;
 	}
 
 	collection = db.collection('characters');
 	
-	collection.find({ "name": url[2] }).toArray()
+	collection.find({ "name": url[2] }).project({ _id: 0, age: 1}).toArray()
 		.then(character => {
 
 			console.log(character);
-			
-			let data = {
-				age: character[0].age
-			};
 
-			response.write(JSON.stringify(data));
+			if (character.length == 0) {
+				response.write("ERROR: Edad errónea!");
+				response.end();
+				return;
+			}
+			
+			response.write(JSON.stringify(character[0]));
 			response.end();
 		});
 
@@ -89,8 +92,14 @@ http.createServer(function(request, response) {
 		break;
 	
 	default:
-		response.write("Página principal");
-		response.end();
+		fs.readFile("index.html", function (err, data) {
+			if (err) {
+				console.error(err);
+			}
+
+			response.write(data);
+			response.end();
+		});
 	}
 
 }).listen(8080);
