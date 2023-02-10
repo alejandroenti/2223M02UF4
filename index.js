@@ -73,11 +73,12 @@ function sendAge (response, url) {
 }
 
 http.createServer(function(request, response) {
-	console.log("Alguien se conecta");
 
 	if (request.url == "/favicon.ico") {
 		return;
 	}
+
+	console.log("Alguien se conecta");
 
 	let url = request.url.split("/");
 	
@@ -95,8 +96,13 @@ http.createServer(function(request, response) {
 		fs.readFile("index.html", function (err, data) {
 			if (err) {
 				console.error(err);
+				response.writeHead(404, {"Content-Type": "text/html"});
+				response.write("Error 404: El archivo no se encuentra en este castillo");
+				response.end();
+				return;
 			}
 
+			response.writeHead(200, {"Content-Type": "text/html"});
 			response.write(data);
 			response.end();
 		});
