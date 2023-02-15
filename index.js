@@ -72,6 +72,76 @@ function sendAge (response, url) {
 
 }
 
+function sendCharacterItems (response, url) {
+
+	let collection = db.collection("characters");
+	collection.find({ "name": url[2] }).project({ _id: 0, id_character: 1}).toArray()
+		.then(characterID => {
+			console.log(characterID);
+			let collection = db.collection("charactersItems");
+			collection.find( {"id_character": characterID[0].id_character} ).project( {_id: 0, id_item: 1} ).toArray()
+				.then(itemsID => {
+
+					console.log(itemsID);
+					let collection = db.collection("items");
+					let itemsName = [];
+					
+					for (let i = 0; i < itemsID.length; i++) {
+						collection.find( {"id_item": itemsID[i].id_item} ).project( { _id: 0, item: 1} ).toArray()
+							.then(item => {
+								itemsName.push(item[0].item);
+								console.log(item);
+							});
+					}
+
+					setTimeout(() => {
+						response.write(JSON.stringify(itemsName));
+					    response.end();
+					}, 1000);
+					
+				});
+		});
+
+}
+
+function sendItems (response) {
+
+	collection = db.collection('items');
+
+	collection.find({}).toArray()
+		.then(items => {
+			console.log(items);
+			
+			let itemsName = [];
+
+			for (let i = 0; i < items.length; i++) {
+				itemsName.push(items[i].item);
+			}
+
+			response.write(JSON.stringify(itemsName));
+			response.end();
+		});
+}
+
+function sendWeapons (response) {
+
+	collection = db.collection('weapons');
+
+	collection.find({}).toArray()
+		.then(weapons => {
+			console.log(weapons);
+			
+			let weaponsName = [];
+
+			for (let i = 0; i < weapons.length; i++) {
+				weaponsName.push(weapons[i].weapon);
+			}
+
+			response.write(JSON.stringify(weaponsName));
+			response.end();
+		});
+}
+
 http.createServer(function(request, response) {
 
 	if (request.url == "/favicon.ico") {
@@ -90,6 +160,21 @@ http.createServer(function(request, response) {
 
 	case "characters":
 		sendCharacters(response);
+		break;
+	
+	case "items":
+		
+		if (url[2] != "") {
+			sendCharacterItems(response, url);
+			break;
+		}
+
+		sendItems(response);
+		break;
+	
+	case "weapons":
+		
+		sendWeapons(response);
 		break;
 	
 	default:
