@@ -164,7 +164,7 @@ http.createServer(function(request, response) {
 	
 	case "items":
 		
-		if (url[2] != "") {
+		if (url[2]) {
 			sendCharacterItems(response, url);
 			break;
 		}
