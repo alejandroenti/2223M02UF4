@@ -74,37 +74,64 @@ function sendAge (response, url) {
 
 function sendCharacterItems (response, url) {
 
+	let name = url[2].trim();
+
+	if (name == "") {
+		response.write(" [!] ERROR: URL mal formada!");
+		response.end();
+		return;
+	}
+
 	let collection = db.collection("characters");
-	collection.find({ "name": url[2] }).project({ _id: 0, id_character: 1}).toArray()
+	collection.find({ "name": name }).project({ _id: 0, id_character: 1}).toArray()
 		.then(characterID => {
 			console.log(characterID);
+			
+			if (characterID.length != 1) {
+				response.write(" [!] ERROR: El personaje " + name  +  " no existe");
+				response.end();
+				return;
+			}
+
 			let collection = db.collection("charactersItems");
 			collection.find( {"id_character": characterID[0].id_character} ).project( {_id: 0, id_item: 1} ).toArray()
 				.then(itemsID => {
-
 					console.log(itemsID);
-					let collection = db.collection("items");
-					let itemsName = [];
-					
-					for (let i = 0; i < itemsID.length; i++) {
-						collection.find( {"id_item": itemsID[i].id_item} ).project( { _id: 0, item: 1} ).toArray()
-							.then(item => {
-								itemsName.push(item[0].item);
-								console.log(item);
-							});
+
+					if (itemsID.length == 0) {
+						response.write("[]");
+						response.end();
+						return;
 					}
 
-					setTimeout(() => {
-						response.write(JSON.stringify(itemsName));
-					    response.end();
-					}, 1000);
-					
+					let collection = db.collection("items");
+					let ids = [];
+
+					itemsID.forEach(element => ids.push(element.id_item));
+
+					collection.find({ "id_item": {$in: ids} }).project( {_id: 0, item: 1} ).toArray()
+						.then( itemsNames => {
+							
+							let names = [];
+
+							itemsNames.forEach( item => names.push(item.item));
+
+							response.write(JSON.stringify(names));
+							response.end();
+
+							return;
+						});
 				});
 		});
-
 }
 
-function sendItems (response) {
+function sendItems (response, url) {
+
+	if (url.length >= 3) {
+
+		sendCharacterItems(response, url);
+		return;
+	}
 
 	collection = db.collection('items');
 
@@ -164,12 +191,7 @@ http.createServer(function(request, response) {
 	
 	case "items":
 		
-		if (url[2]) {
-			sendCharacterItems(response, url);
-			break;
-		}
-
-		sendItems(response);
+		sendItems(response, url);
 		break;
 	
 	case "weapons":

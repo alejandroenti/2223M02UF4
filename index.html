@@ -22,7 +22,7 @@
 		<script>
 			function getCharacters () {
 
-				fetch("http://10.40.1.19:8080/characters")
+				fetch("/characters")
 					.then(response => response.json())
 					.then(characters => {
 				
@@ -40,7 +40,7 @@
 			
 			function getWeapons () {
 
-				fetch("http://10.40.1.19:8080/weapons")
+				fetch("/weapons")
 					.then(response => response.json())
 					.then(weapons => {
 				
@@ -58,7 +58,7 @@
 
 			function getItems() {
 				
-				fetch("http://10.40.1.19:8080/items")
+				fetch("/items")
 					.then(response => response.json())
 					.then(items => {
 					
