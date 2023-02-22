@@ -187,7 +187,27 @@ function insertCharacter (request, response) {
 		let info = qs.parse(data);
 		console.log(info);
 		let collection = db.collection("characters");
-		collection.insertOne(info);
+		
+		if (info.name == undefined) {
+
+			response.write("ERROR: [!] Nombre no definido");
+			response.end();
+			return;
+		}
+
+		if (info.age == undefined) {
+
+			response.write("ERROR: [!] Edad no definida");
+			response.end();
+			return;
+		}
+
+		let insert_info = {
+			name: info.name,
+			age: parseInt(info.age)
+		};
+
+		collection.insertOne(insert_info);
 		response.end();
 	});
 }
