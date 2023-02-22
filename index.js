@@ -208,6 +208,8 @@ function insertCharacter (request, response) {
 		};
 
 		collection.insertOne(insert_info);
+
+		response.write("[*] Nuevo personaje insertado correctamente: " + insert_info.name);
 		response.end();
 	});
 }
