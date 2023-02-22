@@ -4,6 +4,7 @@
 const http = require('http');
 const { MongoClient } = require('mongodb');
 const fs = require('fs');
+const qs = require('querystring');
 
 // Connection URL
 const url = 'mongodb://127.0.0.1:27017';
@@ -183,6 +184,10 @@ function insertCharacter (request, response) {
 	request.on('data', character_chunk => data += character_chunk);
 	request.on('end', () => {
 		console.log(data);
+		let info = qs.parse(data);
+		console.log(info);
+		let collection = db.collection("characters");
+		collection.insertOne(info);
 		response.end();
 	});
 }
