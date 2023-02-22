@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>MongENTI</title>
 		<meta charset="UTF-8">
+		<title>MongENTI</title>
 	</head>
 	<body>
 		<header>
@@ -19,6 +19,14 @@
 		</header>
 		<main id="contents-main">
 		</main>
+		<form action="characters_form" method="POST">
+			<h2>Añadir personaje</h2>
+			<p>
+				<label for="character-name">Nombre</label>
+				<input type="text" name="name" id="character-name"/>
+			<p>
+			<p><input type="submit" value="¡Añadir personaje!"/></p>
+		</form>
 		<script>
 			function getCharacters () {
 
