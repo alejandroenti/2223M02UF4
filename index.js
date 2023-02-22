@@ -169,6 +169,24 @@ function sendWeapons (response) {
 		});
 }
 
+function insertCharacter (request, response) {
+
+	if (request.method != "POST") {
+		
+		response.write("[!] ERROR: Formulario no enviado");
+		response.end();
+		return;
+	}
+
+	let data = "";
+	
+	request.on('data', character_chunk => data += character_chunk);
+	request.on('end', () => {
+		console.log(data);
+		response.end();
+	});
+}
+
 http.createServer(function(request, response) {
 
 	if (request.url == "/favicon.ico") {
@@ -197,6 +215,11 @@ http.createServer(function(request, response) {
 	case "weapons":
 		
 		sendWeapons(response);
+		break;
+
+	case "character_form":
+
+		insertCharacter(request, response);	
 		break;
 	
 	default:
